@@ -200,9 +200,9 @@ const KpiCard = ({ icon, label, value, sub, color = 'blue', empty }) => (
     <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${KPI_COLOR_CLASSES[color] || KPI_COLOR_CLASSES.blue}`}>
       {icon}
     </div>
-    <div>
+    <div className="min-w-0">
       <p className="text-slate-500 text-sm font-medium mb-0.5">{label}</p>
-      <div className={`text-2xl sm:text-3xl font-bold ${empty ? 'text-slate-300' : 'text-slate-900'}`}>
+      <div className={`text-2xl sm:text-3xl font-bold break-words ${empty ? 'text-slate-300' : 'text-slate-900'}`}>
         {value}
       </div>
       {sub && <p className="text-xs text-slate-400 mt-1">{sub}</p>}
@@ -418,23 +418,23 @@ const Dashboard = () => {
                         A rule-based assistant that translates your consultation and ESG signals into practical diagnostic recommendations.
                       </p>
                     </div>
-                    <div className="rounded-2xl border border-blue-100 bg-white px-4 py-3 max-w-sm">
+                    <div className="rounded-2xl border border-blue-100 bg-white px-4 py-3 max-w-sm min-w-0">
                       <p className="text-xs font-black uppercase tracking-wider text-slate-500 mb-1">Lead Recommendation</p>
-                      <p className="font-black text-slate-900">{diagnosticIntelligence.leadRecommendation.signal}</p>
-                      <p className="text-sm text-blue-700 font-bold mt-2">{diagnosticIntelligence.leadRecommendation.recommendation}</p>
+                      <p className="font-black text-slate-900 break-words">{diagnosticIntelligence.leadRecommendation.signal}</p>
+                      <p className="text-sm text-blue-700 font-bold mt-2 break-words">{diagnosticIntelligence.leadRecommendation.recommendation}</p>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">
                     {[
                       ['Operational Risk', diagnosticIntelligence.summary.riskLevel],
                       ['Savings Opportunity', diagnosticIntelligence.summary.opportunity],
                       ['Recommended Service', diagnosticIntelligence.summary.recommendedService],
                       ['Next Step', diagnosticIntelligence.summary.nextStep],
                     ].map(([label, value]) => (
-                      <div key={label} className="rounded-2xl bg-white border border-blue-100 p-4">
+                      <div key={label} className="rounded-2xl bg-white border border-blue-100 p-4 min-w-0">
                         <p className="text-xs font-black uppercase tracking-wider text-blue-600 mb-2">{label}</p>
-                        <p className="text-slate-900 font-black">{value}</p>
+                        <p className="text-slate-900 font-black break-words">{value}</p>
                       </div>
                     ))}
                   </div>
@@ -460,9 +460,9 @@ const Dashboard = () => {
                   </div>
                   <div className="space-y-4">
                     {diagnosticIntelligence.supportingSignals.map((item) => (
-                      <div key={item.label} className="rounded-2xl border border-slate-800 bg-slate-950/50 p-4">
+                      <div key={item.label} className="rounded-2xl border border-slate-800 bg-slate-950/50 p-4 min-w-0">
                         <p className="text-xs font-black uppercase tracking-wider text-slate-400">{item.label}</p>
-                        <p className="font-bold text-white mt-2">{item.value}</p>
+                        <p className="font-bold text-white mt-2 break-words">{item.value}</p>
                       </div>
                     ))}
                   </div>

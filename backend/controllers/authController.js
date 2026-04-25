@@ -2,7 +2,11 @@ import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || 'fallback_secret', {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET is not configured');
+  }
+
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30d',
   });
 };
@@ -22,7 +26,10 @@ export const registerUser = async (req, res) => {
 
     const requestedRole = role === 'admin' ? 'admin' : 'user';
     if (requestedRole === 'admin') {
-      const expectedCode = process.env.ADMIN_INVITE_CODE || 'NOVA-ADMIN-2026';
+      const expectedCode = process.env.ADMIN_INVITE_CODE;
+      if (!expectedCode) {
+        return res.status(500).json({ error: 'Admin registration is not configured.' });
+      }
       if (adminCode !== expectedCode) {
         return res.status(403).json({ error: 'Invalid admin invite code' });
       }

@@ -41,18 +41,74 @@ export const getAdminOverview = async (req, res) => {
       ESG.countDocuments(),
     ]);
 
+    const clientUsers = users.filter((u) => u.role !== 'admin');
+    const clientUserIds = clientUsers.map((user) => user._id);
+    const clientEmails = clientUsers.map((user) => user.email?.toLowerCase()).filter(Boolean);
+
+    const [engagementBookings, engagementESGRuns] = await Promise.all([
+      Booking.find({ email: { $in: clientEmails } })
+        .sort({ createdAt: -1 })
+        .select('email interestArea createdAt'),
+      ESG.find({ userId: { $in: clientUserIds } })
+        .sort({ createdAt: -1 })
+        .select('userId optimizationPotential carbonReduction logisticsSpend carbonWaste createdAt'),
+    ]);
+
+    const userIdByEmail = new Map(clientUsers.map((user) => [user.email?.toLowerCase(), String(user._id)]));
+    const bookingsByEmail = engagementBookings.reduce((acc, booking) => {
+      const email = booking.email?.toLowerCase();
+      if (!email) return acc;
+      acc[email] = acc[email] || [];
+      acc[email].push(booking);
+      return acc;
+    }, {});
+    const esgByUserId = engagementESGRuns.reduce((acc, run) => {
+      const key = String(run.userId);
+      acc[key] = acc[key] || [];
+      acc[key].push(run);
+      return acc;
+    }, {});
+
+    const enrichedEngagements = engagements.map((engagement) => {
+      const email = engagement.clientEmail?.toLowerCase();
+      const userId = userIdByEmail.get(email);
+      const relatedBookings = bookingsByEmail[email] || [];
+      const relatedESGRuns = userId ? (esgByUserId[userId] || []) : [];
+      const totalESGSavings = relatedESGRuns.reduce((sum, run) => sum + run.optimizationPotential, 0);
+      const totalCarbonReduced = relatedESGRuns.reduce((sum, run) => sum + run.carbonReduction, 0);
+      const serviceFrequency = relatedBookings.reduce((acc, booking) => {
+        const key = booking.interestArea || 'Other';
+        acc[key] = (acc[key] || 0) + 1;
+        return acc;
+      }, {});
+      const primaryPainPoint = Object.entries(serviceFrequency).sort((a, b) => b[1] - a[1])[0]?.[0] || '';
+
+      return {
+        ...engagement.toObject(),
+        analyticsPreview: {
+          totalBookings: relatedBookings.length,
+          totalESGRuns: relatedESGRuns.length,
+          totalESGSavings,
+          totalCarbonReduced,
+          primaryPainPoint,
+          latestBookingAt: relatedBookings[0]?.createdAt || null,
+          latestESGRun: relatedESGRuns[0] || null,
+        },
+      };
+    });
+
     res.json({
       kpis: {
-        clients: users.filter((u) => u.role !== 'admin').length,
+        clients: clientUsers.length,
         admins: users.filter((u) => u.role === 'admin').length,
         bookings: bookingCount,
         esgRuns: esgCount,
-        engagements: engagements.length,
+        engagements: enrichedEngagements.length,
       },
       users,
       recentBookings: bookings,
       recentESGRuns: esgRuns,
-      engagements,
+      engagements: enrichedEngagements,
     });
   } catch (error) {
     console.error('Admin overview error:', error);

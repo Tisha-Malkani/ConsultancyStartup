@@ -37,17 +37,22 @@ const BlogPost = () => {
       {/* Header */}
       <div className="bg-slate-900 py-24 text-center px-4 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-        <div className="max-w-4xl mx-auto relative z-10">
-          <Link to="/blogs" className="inline-flex items-center text-blue-400 hover:text-blue-300 font-medium mb-8 transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Back to all insights
-          </Link>
+        <div className="max-w-5xl mx-auto relative z-10 px-4 sm:px-6 lg:px-8 text-left">
+          <div className="mb-8">
+            <Link
+              to="/blogs"
+              className="inline-flex items-center rounded-full border border-white/15 bg-slate-900/45 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-slate-950/20 backdrop-blur transition-colors hover:bg-slate-900/60"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" /> Back to all insights
+            </Link>
+          </div>
           <div className="mb-6 inline-block bg-blue-600/20 border border-blue-500/30 text-blue-300 px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider">
             {blog.category}
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-8 leading-tight">
             {blog.title}
           </h1>
-          <div className="flex items-center justify-center space-x-6 text-slate-300 font-medium">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-slate-300 font-medium">
             <div className="flex items-center">
               <span className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-white mr-3 font-bold text-sm">
                 {blog.author.charAt(0)}

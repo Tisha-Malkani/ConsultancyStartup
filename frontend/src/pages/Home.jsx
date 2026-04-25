@@ -1,5 +1,6 @@
-import { ArrowRight, BarChart3, CheckCircle2, Download, Factory, FileText, Leaf, PackageCheck, ShieldCheck, Target, TrendingUp, Truck } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Download, FileText, Leaf, PackageCheck, Target, TrendingUp, Truck } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { industryPreviewCards } from '../data/industryData.js';
 
 const Home = () => {
   const proofMetrics = [
@@ -260,18 +261,15 @@ const Home = () => {
               </Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              {[
-                { icon: <Factory className="w-6 h-6" />, title: 'Manufacturing', text: 'Lean operations, production reliability, supplier risk, and quality control.' },
-                { icon: <BarChart3 className="w-6 h-6" />, title: 'FMCG & Retail', text: 'Forecast accuracy, inventory turns, replenishment, and distribution agility.' },
-                { icon: <ShieldCheck className="w-6 h-6" />, title: 'Pharma & Regulated', text: 'Procurement governance, compliance visibility, and critical supplier assurance.' },
-                { icon: <Truck className="w-6 h-6" />, title: 'Logistics', text: 'Fleet utilization, route optimization, freight consolidation, and OTIF improvement.' },
-              ].map((industry) => (
+              {industryPreviewCards.map((industry) => {
+                const Icon = industry.icon;
+                return (
                 <div key={industry.title} className="rounded-2xl border border-slate-700 bg-slate-800/70 p-6 hover:bg-slate-800 hover:border-blue-500/60 transition-all duration-300">
-                  <div className="text-blue-400 mb-4">{industry.icon}</div>
+                  <div className="text-blue-400 mb-4"><Icon className="w-6 h-6" /></div>
                   <h3 className="font-bold text-lg mb-2">{industry.title}</h3>
                   <p className="text-slate-400 leading-relaxed">{industry.text}</p>
                 </div>
-              ))}
+              )})}
             </div>
           </div>
         </div>

@@ -83,13 +83,18 @@ const MetaManager = () => {
   return null;
 };
 
-function App() {
+const RoutedApp = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location.pathname]);
+
   return (
-    <Router>
-      <MetaManager />
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <main className="flex-grow">
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      <main className="flex-grow">
+        <div key={location.pathname} className="page-shell">
           <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<Home />} />
@@ -113,21 +118,28 @@ function App() {
                   </AdminRoute>
                 }
               />
-              
-              {/* Protected Route for Dashboard */}
-              <Route 
-                path="/dashboard" 
+              <Route
+                path="/dashboard"
                 element={
                   <ClientRoute>
                     <Dashboard />
                   </ClientRoute>
-                } 
+                }
               />
             </Routes>
           </Suspense>
-        </main>
-        <Footer />
-      </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+function App() {
+  return (
+    <Router>
+      <MetaManager />
+      <RoutedApp />
     </Router>
   );
 }

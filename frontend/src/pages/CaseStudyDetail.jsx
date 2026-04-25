@@ -49,20 +49,26 @@ const CaseStudyDetail = () => {
       <div className="relative h-80 md:h-[420px] overflow-hidden">
         <img src={study.image} alt={study.title} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16 max-w-5xl mx-auto w-full">
-          <Link
+        <div className="absolute bottom-0 left-0 right-0">
+          <div className="max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-8 md:pb-16">
+          <div className="mb-7">
+            <Link
             to="/case-studies"
-            className="inline-flex items-center text-slate-300 hover:text-white text-sm font-medium mb-6 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4 mr-1" /> All Case Studies
-          </Link>
-          <div className="inline-block px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold uppercase tracking-wider mb-4">
-            {study.category}
+              className="inline-flex items-center rounded-full border border-white/15 bg-slate-900/45 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-slate-950/20 backdrop-blur transition-colors hover:bg-slate-900/60"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" /> All Case Studies
+            </Link>
           </div>
-          <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
-            {study.title}
-          </h1>
-          <p className="text-blue-400 font-bold mt-3 text-lg">{study.client}</p>
+          <div>
+            <div className="inline-block px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold uppercase tracking-wider mb-4">
+              {study.category}
+            </div>
+            <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+              {study.title}
+            </h1>
+            <p className="text-blue-400 font-bold mt-3 text-lg">{study.client}</p>
+          </div>
+          </div>
         </div>
       </div>
 

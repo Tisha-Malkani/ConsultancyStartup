@@ -1,13 +1,21 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
+const getJwtSecret = () => process.env.JWT_SECRET;
+
 // Hard protect — blocks unauthenticated requests
 export const protect = async (req, res, next) => {
   let token;
+  const jwtSecret = getJwtSecret();
+
+  if (!jwtSecret) {
+    return res.status(500).json({ error: 'Authentication is not configured.' });
+  }
+
   if (req.headers.authorization?.startsWith('Bearer')) {
     try {
       token = req.headers.authorization.split(' ')[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret');
+      const decoded = jwt.verify(token, jwtSecret);
       req.user = await User.findById(decoded.id).select('-password');
       return next();
     } catch {
@@ -20,10 +28,15 @@ export const protect = async (req, res, next) => {
 // Soft protect — attaches user if token present, but doesn't block if not
 export const optionalAuth = async (req, res, next) => {
   try {
+    const jwtSecret = getJwtSecret();
+    if (!jwtSecret) {
+      return next();
+    }
+
     const auth = req.headers.authorization;
     if (auth?.startsWith('Bearer')) {
       const token = auth.split(' ')[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret');
+      const decoded = jwt.verify(token, jwtSecret);
       req.user = await User.findById(decoded.id).select('-password');
     }
   } catch {

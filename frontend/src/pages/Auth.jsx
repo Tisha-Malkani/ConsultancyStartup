@@ -46,7 +46,7 @@ const Auth = () => {
         const res = await loginUser({ email: formData.email, password: formData.password });
         data = res.data;
       } else {
-        const res = await registerUser(formData);
+        const res = await registerUser({ ...formData, role: 'user', adminCode: '' });
         data = res.data;
         setSuccess(`Welcome, ${data.name}! Account created. Redirecting…`);
         await new Promise((r) => setTimeout(r, 1500));
@@ -75,8 +75,12 @@ const Auth = () => {
         <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
         <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-slate-950/60 to-transparent pointer-events-none"></div>
 
-        <div className="relative z-10 max-w-md mx-auto w-full">
-          <Link to="/" className="inline-flex items-center text-blue-400 hover:text-blue-300 font-semibold text-sm mb-10 transition-colors">
+        <div className="relative z-10 max-w-md mx-auto w-full flex flex-col items-start">
+          
+          <Link
+            to="/"
+            className="inline-flex items-center rounded-full border border-white/15 bg-slate-900/45 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-slate-950/20 backdrop-blur transition-colors hover:bg-slate-900/60 mb-4"
+          >
             ← Back to NovaConsult
           </Link>
 
@@ -157,42 +161,6 @@ const Auth = () => {
                     autoComplete="name"
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2">Account Type</label>
-                  <div className="grid grid-cols-2 gap-3">
-                    {[
-                      { value: 'user', label: 'Client' },
-                      { value: 'admin', label: 'Consultant' },
-                    ].map((option) => (
-                      <label key={option.value} className={`cursor-pointer rounded-xl border px-4 py-3 text-sm font-bold transition-all ${formData.role === option.value ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'}`}>
-                        <input
-                          type="radio"
-                          name="role"
-                          value={option.value}
-                          checked={formData.role === option.value}
-                          onChange={handleChange}
-                          className="sr-only"
-                        />
-                        {option.label}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                {formData.role === 'admin' && (
-                  <div>
-                    <label className="block text-sm font-bold text-slate-700 mb-2">Admin Invite Code</label>
-                    <input
-                      type="text"
-                      name="adminCode"
-                      value={formData.adminCode}
-                      onChange={handleChange}
-                      className={inputClass}
-                      placeholder="Provided by NovaConsult"
-                      autoComplete="off"
-                    />
-                    <p className="text-xs text-slate-400 mt-1.5">Demo default: NOVA-ADMIN-2026 unless changed in backend .env.</p>
-                  </div>
-                )}
               </>
             )}
 
