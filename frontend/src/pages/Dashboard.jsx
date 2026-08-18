@@ -369,15 +369,7 @@ const Dashboard = () => {
             <p className="text-slate-400 mt-1 text-sm">Enterprise portal for consultations, ESG models, supplier benchmarks, documents, actions, and implementation progress.</p>
           </div>
           <div className="flex items-center gap-3">
-            <Link to="/esg-calculator" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-bold transition-colors shadow-sm">
-              Run ESG Calc
-            </Link>
-            <Link to="/contact" className="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-colors border border-slate-700">
-              Book Consultation
-            </Link>
-            <button onClick={handleLogout} className="flex items-center text-slate-400 hover:text-red-400 text-sm font-medium transition-colors gap-1">
-              <LogOut className="w-4 h-4" /> Logout
-            </button>
+            
           </div>
         </div>
       </div>
